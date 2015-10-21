@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class name="app.User" table="user" schema="protein_tracker">
         <id name="id" type="int">
@@ -9,7 +9,20 @@
             <generator class="increment"/>
         </id>
         <property name="name" type="string" column="username"/>
-        <property name="total" type="int" column="total"/>
-        <property name="goal" type="int" column="goal"/>
+
+        <component name="proteinData">
+            <property name="total" type="int" column="total"/>
+            <property name="goal" type="int" column="goal"/>
+        </component>
+
+        <list name="history" table="user_history" inverse="true" cascade="save-update">
+            <key column="user_id" />
+            <list-index column="position" />
+            <!--<composite-element class="app.UserHistory">-->
+                <!--<property name="entry" type="string" column="entry"/>-->
+                <!--<property name="entryTime" type="date" column="timestamp" />-->
+            <!--</composite-element>-->
+            <one-to-many class="app.UserHistory" />
+        </list>
     </class>
 </hibernate-mapping>
